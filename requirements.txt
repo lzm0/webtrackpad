@@ -1,2 +1,2 @@
-pymouse==1.0
+pyuserinput==0.1.11
 websockets==8.1
