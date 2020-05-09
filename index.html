@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Web Trackpad</title>
+    <script type='text/javascript'>
+    function init() {
+      const socket = new WebSocket('ws://' + location.host + ':8080/');
+      const sensitivity = 2.0;
+      var x = 0;
+      var y = 0;
+      var moved = false;
+      document.addEventListener('touchstart', function(event) {
+          x = event.touches[0].screenX;
+          y = event.touches[0].screenY;
+          moved = false;
+      }, false);
+      document.addEventListener('touchmove', function(event) {
+          moved = true;
+          dx = event.touches[0].screenX - x;
+          dy = event.touches[0].screenY - y;
+          x = event.touches[0].screenX;
+          y = event.touches[0].screenY;
+          socket.send(sensitivity * dx + ',' + sensitivity * dy);
+      }, false);
+      document.addEventListener('touchend', function(event) {
+          if (!moved) {
+              socket.send('c')
+          }
+      }, false);
+    }
+    </script>
+  </head>
+  <body onload="init()" style="overscroll-behavior:none">
+  </body>
+</html>
