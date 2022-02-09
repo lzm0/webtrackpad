@@ -1,36 +1,46 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Web Trackpad</title>
-    <script type='text/javascript'>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Web Trackpad</title>
+  <script type='text/javascript'>
     function init() {
       const socket = new WebSocket('ws://' + location.host);
       const sensitivity = 2.0;
       var x = 0;
       var y = 0;
       var moved = false;
-      document.addEventListener('touchstart', function(event) {
-          x = event.touches[0].screenX;
-          y = event.touches[0].screenY;
-          moved = false;
+      document.addEventListener('touchstart', function (event) {
+        x = event.touches[0].screenX;
+        y = event.touches[0].screenY;
+        moved = false;
       }, false);
-      document.addEventListener('touchmove', function(event) {
-          moved = true;
-          dx = event.touches[0].screenX - x;
-          dy = event.touches[0].screenY - y;
-          x = event.touches[0].screenX;
-          y = event.touches[0].screenY;
-          socket.send(sensitivity * dx + ',' + sensitivity * dy);
+      document.addEventListener('touchmove', function (event) {
+        moved = true;
+        dx = event.touches[0].screenX - x;
+        dy = event.touches[0].screenY - y;
+        x = event.touches[0].screenX;
+        y = event.touches[0].screenY;
+        socket.send(sensitivity * dx + ',' + sensitivity * dy);
       }, false);
-      document.addEventListener('touchend', function(event) {
-          if (!moved) {
-              socket.send('c')
-          }
+      document.addEventListener('touchend', function (event) {
+        if (!moved) {
+          socket.send('c')
+        }
       }, false);
     }
-    </script>
-  </head>
-  <body onload="init()" style="overscroll-behavior:none;background-color:black;">
-  </body>
+  </script>
+</head>
+
+<body onload="init()" scroll="no">
+</body>
+<style>
+  body {
+    overflow: hidden;
+    overscroll-behavior: none;
+    background-color: black;
+  }
+</style>
+
 </html>
